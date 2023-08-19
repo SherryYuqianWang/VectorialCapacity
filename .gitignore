@@ -1,2 +1,5 @@
-#ignore
+#ignore plot (.png)
 .png
+
+#ignore output folder
+output/
