@@ -1,8 +1,7 @@
 rm(list = ls())
-#setwd("~/MariaDecayAnalysis")
 
-source("~/malaria/VC/function/relchange_entomology_GSA.R")
-parameter_value = read.csv('~/malaria/VC/parameter/parameter_value.csv')
+source("~/function/relchange_entomology_GSA.R")
+parameter_value = read.csv('~/parameter/parameter_value.csv')
 
 
 library(ggplot2)
@@ -10,7 +9,6 @@ library(lhs)
 library(sensitivity)
 library(tidyr)
 library(dplyr)
-#library(doSNOW)
 library(sensobol)
 library(data.table)
 
@@ -39,7 +37,6 @@ tau_mean = value[[10]]
 tau_min = value[[11]]
 tau_max = value[[12]]
 
-#sobol<-data.frame(matrix(ncol = repeats*2, nrow = 4))
 
 N <- 10000
 params <- c("HBI","parous","sac","tau")
@@ -58,7 +55,6 @@ X<-sobol_matrices(
 )
 
 
-#matrix for scatter plot
 X[, 1] <- qunif(X[, 1], min = HBI_min, max = HBI_max)
 X[, 2] <- qunif(X[,2],min = parous_min, max = parous_max)
 X[, 3] <- qunif(X[,3],min = sac_min, max = sac_max)
@@ -74,9 +70,6 @@ for (s in 1:nrow(X1)){
                                                  N_b))
 }
 
-#plot_scatter(data = X, N = N, Y = y, params = params)
-##plot_multiscatter(data = X, N = N, Y = y, params = params, smpl = 2^14)
-
 
 ind <- sobol_indices(Y = y, N = N, params = params, order=order, boot = TRUE, R = R)
 
@@ -85,36 +78,6 @@ plot<-data.frame(ind$results)
 ind.dummy <- sobol_dummy(Y = y, N = N, params = params, boot = TRUE,
                          R = R)
 
-saveRDS(plot,file="~/malaria/VC/output/ent_sobol")
-saveRDS(ind.dummy,file="~/malaria/VC/output/ent_dummy")
+saveRDS(plot,file="~/output/ent_sobol")
+saveRDS(ind.dummy,file="~/output/ent_dummy")
 
-p<-ggplot(plot,aes(x=parameters, y=original, fill=sensitivity))+
-  geom_bar(position=position_dodge(), stat="identity",
-           colour="black", # Use black outlines
-           width = 0.9,
-           linewidth=0.05) +      # Thinner lines
-  geom_errorbar(aes(ymin=low.ci, ymax=high.ci), size= 0.4, width=0.2, position=position_dodge(0.9))+
-  geom_hline(yintercept=ind.dummy$original[2], linetype="dashed", color = "blue")+
-  geom_hline(yintercept=ind.dummy$original[1], linetype="dashed", color = "red")+
-  xlab("Parameter") +
-  ylab("Sobol' indices") +
-  #scale_fill_hue(name="Indices type", # Legend label, use darker colors
-  #               breaks=c("first", "total"),
-  #               labels=c("first-order", "total-order")) +
-  scale_fill_manual(values=c("#c6dbef","#08306b"),
-                   labels=c('First-order', 'Total-order'),
-                    name="Sobol's index") +
-  #scale_fill_manual(values=c("#c6dbef","#9ecae1","#08306b")) +
-  ylim(-0.01,1)+
-  theme_bw()
-  #theme(legend.position = "none")
-  
-p
-
-ggsave("ento_sobol.png", width = 8, height = 7)
-
-ggsave("dirus_sobol.png", width = 3, height = 4)
-ggsave("minimus_sobol.png", width = 3, height = 4)
-ggsave("sinensis_sobol.png", width = 3, height = 4)
-ggsave("sundaicus_sobol.png", width = 3, height = 4)
-ggsave("maculatus_sobol.png", width = 4, height = 4)
