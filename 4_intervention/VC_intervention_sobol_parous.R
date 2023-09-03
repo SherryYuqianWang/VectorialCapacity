@@ -1,8 +1,8 @@
 rm(list = ls())
 
-source("~/function/relchange_intervention2_GSA.R")
-parameter_value = read.csv('~/parameter/parameter_value.csv')
-int = read.csv('~/parameter/intervention_value.csv')
+source("~/1_function/relchange_intervention2_GSA.R")
+parameter_value = read.csv('~/2_parameter/parameter_value.csv')
+int = read.csv('~/2_parameter/intervention_value.csv')
 
 library(ggplot2)
 library(lhs)
@@ -71,7 +71,7 @@ X<-sobol_matrices(
   type = "QRN",
 )
 
-#matrix for scatter plot
+
 X[, 1] <- qunif(X[,1], min = betar_min, max = betar_max)
 X[, 2] <- qunif(X[,2],min = betam_min, max = betam_max)
 X[, 3] <- qunif(X[,3],min = betad_min, max = betad_max)
@@ -82,7 +82,6 @@ X1<-data.table(X)
 
 
 for (i in 1:3){
-
   coverage=coverage_sample[i]
  
 for(v in 1:length(parous_range)){
@@ -90,7 +89,7 @@ for(v in 1:length(parous_range)){
 
   y=rep(0,nrow(X))
   for (s in 1:nrow(X)){
-    y[s] <- with(X1[s,], VCrelchange_intervention2_GSA(HBI_mean, betar, parous_mean, betam, betad,
+    y[s] <- with(X1[s,], VCrelchange_intervention_GSA(HBI_mean, betar, parous_mean, betam, betad,
                                                        sac_mean, xi, tau_mean, 
                                                        N_b,coverage))
   }
@@ -111,5 +110,5 @@ for(v in 1:length(parous_range)){
 
 }
 
-saveRDS(DT_plot,file="~/output/int_parous_sobol")
+saveRDS(DT_plot,file="~/5_output/int_parous_sobol")
 

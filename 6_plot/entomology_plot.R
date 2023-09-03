@@ -1,9 +1,9 @@
 rm(list = ls())
 
 #load the data for ploting
-prcc_plot<-readRDS("~/output/ent_prcc")
-plot<-readRDS("~/output/ent_sobol")
-ind.dummy<-readRDS("~/output/ent_dummy")
+prcc_plot<-readRDS("~/5_output/ent_prcc")
+plot<-readRDS("~/5_output/ent_sobol")
+ind.dummy<-readRDS("~/5_output/ent_dummy")
 
 
 library(ggpubr)

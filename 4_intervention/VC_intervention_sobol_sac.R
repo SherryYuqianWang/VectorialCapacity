@@ -1,8 +1,8 @@
 rm(list = ls())
 
-source("~/function/relchange_intervention2_GSA.R")
-parameter_value = read.csv('~/parameter/parameter_value.csv')
-int = read.csv('~/parameter/intervention_value.csv')
+source("~/1_function/relchange_intervention2_GSA.R")
+parameter_value = read.csv('~/2_parameter/parameter_value.csv')
+int = read.csv('~/2_parameter/intervention_value.csv')
 
 library(ggplot2)
 library(lhs)
@@ -11,9 +11,10 @@ library(tidyr)
 library(dplyr)
 library(abind)
 library(profvis)
+library(epiR)
 library(Rmisc)
-library(sensobol)
-library(data.table)
+library(ggpubr)
+library(qrng)
 
 
 ##############################
@@ -40,10 +41,8 @@ betad_max = int$betad_max
 xi_min = int$xi_min
 xi_max = int$xi_max
 
-
-HBI_range=seq(0.01,1,by=0.01)
+sac_range=seq(0.16,0.88,by=0.01)
 coverage_sample=c(0.1,0.3,0.5)
-
 
 sobol<-list()
 DT_plot <- data.table("mean" = numeric(),    # Create an empty data.table
@@ -51,7 +50,7 @@ DT_plot <- data.table("mean" = numeric(),    # Create an empty data.table
                    "high.ci" = numeric(),
                    "order" = character(),
                    "parameter" = character(),
-                   "HBI" = numeric(),
+                   "sac" = numeric(),
                    "coverage" = numeric()
                    )
 
@@ -61,6 +60,7 @@ params <- c("betar","betam","betad","xi")
 order <- "first"
 R<-50
 
+
 X<-sobol_matrices(
   matrices = c("A", "B", "AB"),
   N=N,
@@ -69,7 +69,7 @@ X<-sobol_matrices(
   type = "QRN",
 )
 
-#matrix for scatter plot
+
 X[, 1] <- qunif(X[,1], min = betar_min, max = betar_max)
 X[, 2] <- qunif(X[,2],min = betam_min, max = betam_max)
 X[, 3] <- qunif(X[,3],min = betad_min, max = betad_max)
@@ -78,14 +78,11 @@ X[, 4] <- qunif(X[,4],min = xi_min, max = xi_max)
 #datatable for output
 X1<-data.table(X)
 
-
 for (i in 1:3){
-#  sobol<-list()
   coverage=coverage_sample[i]
  
-for(v in 1:length(HBI_range)){
-  HBI_mean=HBI_range[v]
-
+for(v in 1:length(sac_range)){
+  sac_mean=sac_range[v]
   y=rep(0,nrow(X))
   for (s in 1:nrow(X)){
     y[s] <- with(X1[s,], VCrelchange_intervention_GSA(HBI_mean, betar, parous_mean, betam, betad,
@@ -101,14 +98,12 @@ for(v in 1:length(HBI_range)){
                    "high.ci" = sobol$high.ci,
                    "order" = sobol$sensitivity,
                    "parameter" = sobol$parameters,
-                   "HBI" = HBI_mean,
+                   "sac" = sac_mean,
                    "coverage" = coverage
                    )
-
   DT_plot<-rbind(DT_plot,DT_sobol)
 }
 
 }
 
-
-saveRDS(DT_plot,file="~/output/int_HBI_sobol")
+saveRDS(DT_plot,file="~/5_output/int_sac_sobol")

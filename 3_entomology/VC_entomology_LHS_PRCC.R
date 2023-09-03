@@ -1,7 +1,7 @@
 rm(list = ls())
 
-source("~/function/relchange_entomology_GSA.R") #load the function
-parameter_value = read.csv('~/parameter/parameter_value.csv')
+source("~/1_function/relchange_entomology_GSA.R") #load the function
+parameter_value = read.csv('~/2_parameter/parameter_value.csv')
 
 library(ggplot2)
 library(lhs)
@@ -71,4 +71,4 @@ prcc_plot[,3]<-sapply(prcc_new,quantile, probs=0.025)
 prcc_plot[,4]<-c("HBI","parous","sac","tau")
 names(prcc_plot) = c('high.ci','mean','low.ci', 'parameters')
 
-saveRDS(prcc_plot,file="~/output/ent_prcc")
+saveRDS(prcc_plot,file="~/5_output/ent_prcc")

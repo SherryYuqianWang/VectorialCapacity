@@ -1,8 +1,8 @@
 rm(list = ls())
 
-source("~/function/relchange_intervention2_GSA.R")
-parameter_value = read.csv('~/parameter/parameter_value.csv')
-int = read.csv('~/parameter/intervention_value.csv')
+source("~/1_function/relchange_intervention2_GSA.R")
+parameter_value = read.csv('~/2_parameter/parameter_value.csv')
+int = read.csv('~/2_parameter/intervention_value.csv')
 
 library(ggplot2)
 library(lhs)
@@ -93,4 +93,4 @@ for(v in 1:length(sac_range)){
  }
 }
 
-saveRDS(DT_plot,file="~/output/int_sac_PRCC")
+saveRDS(DT_plot,file="~/5_output/int_sac_PRCC")

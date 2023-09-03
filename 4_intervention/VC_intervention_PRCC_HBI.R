@@ -1,8 +1,8 @@
 rm(list = ls())
 
-source("~/function/relchange_intervention2_GSA.R")
-parameter_value = read.csv('~/parameter/parameter_value.csv')
-int = read.csv('~/parameter/intervention_value.csv')
+source("~/1_function/relchange_intervention_GSA.R")
+parameter_value = read.csv('~/2_parameter/parameter_value.csv')
+int = read.csv('~/2_parameter/intervention_value.csv')
 
 library(ggplot2)
 library(lhs)
@@ -13,14 +13,13 @@ library(abind)
 library(profvis)
 library(epiR)
 library(Rmisc)
-library(ggpubr)
 library(data.table)
 
 ##############################
-#set.seed(123)
+set.seed(123)
 n_samples = 500 #number of samples generated from LHS
 n_params = 4 #number of parameters
-repeats = 10 #number of repeats for averaging
+repeats = 50 #number of repeats for averaging
 
 #default parameters
 N_b=1000 
@@ -30,18 +29,19 @@ value<-parameter_value[parameter_value$species == "all",2:13]
 HBI_mean = value[[1]]
 parous_mean = value[[4]]
 sac_mean = value[[7]]
-tau_mean = value[[10]]  
+tau_mean = value[[10]]
 
 betar_min = int$betar_min
 betar_max = int$betar_max
-betam_min = int$betam_min
-betam_max = int$betam_max
 betad_min = int$betad_min
 betad_max = int$betad_max
+betam_min = int$betam_min
+betam_max = int$betam_max
 xi_min = int$xi_min
 xi_max = int$xi_max
 
-parous_range=seq(0.39,0.78,by=0.01)
+
+HBI_range=seq(0.01,1,by=0.01)
 coverage_sample=c(0.1,0.3,0.5)
 
 
@@ -49,15 +49,15 @@ DT_plot <- data.table("mean" = numeric(),    # Create an empty data.table
                       "low.ci" = numeric(),
                       "high.ci" = numeric(),
                       "parameter" = character(),
-                      "parous" = numeric(),
+                      "HBI" = numeric(),
                       "coverage" = numeric())
 
 for (i in 1:3){
   
   coverage=coverage_sample[i]
   
-for(v in 1:length(parous_range)){
-  parous_mean=parous_range[v]
+for(v in 1:length(HBI_range)){
+  HBI_mean=HBI_range[v]
   prcc<-data.frame(matrix(ncol = repeats, nrow = n_params))
 
   #generate sample  
@@ -68,15 +68,15 @@ for(v in 1:length(parous_range)){
         betam=qunif(A[,2],min = betam_min, max = betam_max),
         betad=qunif(A[,3],min = betad_min, max = betad_max),
         xi=qunif(A[,4],min = xi_min, max = xi_max))
-    
+  
     #Calculate relative change of vectorial capacity
     y=rep(0,n_samples)
     
     for (s in 1:n_samples){
       y[s] <- with(X[s,], VCrelchange_intervention_GSA(HBI_mean, betar, parous_mean, betam, betad,
-                                                        sac_mean, xi, tau_mean,
-                                                        N_b,coverage))
-      }
+                                      sac_mean, xi, tau_mean,
+                                      N_b,coverage))
+    }
     
     #Calculate PRCCs for each parameter set as PRCC
     x <- pcc(X, y, rank=TRUE)
@@ -86,11 +86,12 @@ for(v in 1:length(parous_range)){
   DT_prcc<-data.table("mean" = apply(prcc,1,mean),
                        "low.ci" = apply(prcc,1, quantile,probs=0.025),
                        "high.ci" = apply(prcc, 1, quantile, probs=0.975),
-                       "parameter" = c("repell","pre-kill","disarm","post-kill"),
-                       "parous" = parous_mean,
+                       "parameter" = c("betar","betam","betad","xi"),
+                       "HBI" = HBI_mean,
                        "coverage" = coverage)
   DT_plot<-rbind(DT_plot,DT_prcc)
  }
 }
 
-save(DT_plot,file = "~/output/int_parous_PRCC")
+saveRDS(DT_plot,file="~/5_output/int_HBI_PRCC")
+

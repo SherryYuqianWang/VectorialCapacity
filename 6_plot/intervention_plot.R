@@ -1,12 +1,12 @@
 rm(list = ls())
 
 #load the data for ploting
-HBI_prcc<-readRDS("~/malaria/VC/output/int_HBI_PRCC")
-parous_prcc<-readRDS("~/malaria/VC/output/int_parous_PRCC")
-sac_prcc<-readRDS("~/malaria/VC/output/int_sac_PRCC")
-HBI_sobol<-readRDS("~/malaria/VC/output/int_HBI_sobol")
-parous_sobol<-readRDS("~/malaria/VC/output/int_parous_sobol")
-sac_sobol<-readRDS("~/malaria/VC/output/int_sac_sobol")
+HBI_prcc<-readRDS("~/malaria/VC/5_output/int_HBI_PRCC")
+parous_prcc<-readRDS("~/malaria/VC/5_output/int_parous_PRCC")
+sac_prcc<-readRDS("~/malaria/VC/output/5_int_sac_PRCC")
+HBI_sobol<-readRDS("~/malaria/VC/output/5_int_HBI_sobol")
+parous_sobol<-readRDS("~/malaria/VC/output/5_int_parous_sobol")
+sac_sobol<-readRDS("~/malaria/VC/output/5_int_sac_sobol")
 
 
 library(ggpubr)

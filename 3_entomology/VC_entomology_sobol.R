@@ -1,7 +1,7 @@
 rm(list = ls())
 
-source("~/function/relchange_entomology_GSA.R")
-parameter_value = read.csv('~/parameter/parameter_value.csv')
+source("~/1_function/relchange_entomology_GSA.R")
+parameter_value = read.csv('~/2_parameter/parameter_value.csv')
 
 
 library(ggplot2)
@@ -78,6 +78,6 @@ plot<-data.frame(ind$results)
 ind.dummy <- sobol_dummy(Y = y, N = N, params = params, boot = TRUE,
                          R = R)
 
-saveRDS(plot,file="~/output/ent_sobol")
-saveRDS(ind.dummy,file="~/output/ent_dummy")
+saveRDS(plot,file="~/5_output/ent_sobol")
+saveRDS(ind.dummy,file="~/5_output/ent_dummy")
 
