@@ -1,22 +1,17 @@
 rm(list = ls())
 
 source("~/1_function/relchange_entomology_GSA.R") #load the function
-parameter_value = read.csv('~/2_parameter/parameter_value.csv')
+parameter_value = read.csv('~/2_parameter/bionomics_value.csv')
 
-library(ggplot2)
 library(lhs)
 library(sensitivity)
-library(tidyverse)
-
 
 ##############################
 set.seed(123)
-n_params = 4
-repeats = 20
-species = 4
+
 
 #default parameters
-N_samples = 1000
+
 N_b = 1000 # human population size
 
 value<-parameter_value[parameter_value$species == "all",2:13]
@@ -33,6 +28,11 @@ sac_max = value[[9]]
 tau_mean = value[[10]]
 tau_min = value[[11]]
 tau_max = value[[12]]
+
+#LHS-PRCC
+n_params = 4  #number of parameters
+N_samples = 500  # number of sample set
+repeats = 50   # number of repeat
 
 prcc<-data.frame(matrix(ncol = repeats ,nrow = n_params))
 

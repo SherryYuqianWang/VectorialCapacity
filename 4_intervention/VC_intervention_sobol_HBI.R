@@ -1,26 +1,17 @@
 rm(list = ls())
 
-source("~/1_function/relchange_intervention2_GSA.R")
-parameter_value = read.csv('~/2_parameter/parameter_value.csv')
+source("~/1_function/relchange_intervention_GSA.R")
+parameter_value = read.csv('~/2_parameter/bionomics_value.csv')
 int = read.csv('~/2_parameter/intervention_value.csv')
 
-library(ggplot2)
-library(lhs)
-library(sensitivity)
-library(tidyr)
-library(dplyr)
-library(abind)
-library(profvis)
-library(Rmisc)
+
 library(sensobol)
 library(data.table)
 
 
 ##############################
 #set.seed(123)
-N_samples = 10000 #number of samples generated from 
-n_params = 4 #number of parameters
-repeats = 10 #number of repeats for averaging
+
 
 #default parameters
 N_b=1000 
@@ -59,7 +50,7 @@ DT_plot <- data.table("mean" = numeric(),    # Create an empty data.table
 N <- 1000
 params <- c("betar","betam","betad","xi")
 order <- "first"
-R<-50
+R<-50 #number of bootstrap replicas
 
 X<-sobol_matrices(
   matrices = c("A", "B", "AB"),

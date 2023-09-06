@@ -1,25 +1,16 @@
 rm(list = ls())
 
 source("~/1_function/relchange_intervention_GSA.R")
-parameter_value = read.csv('~/2_parameter/parameter_value.csv')
+parameter_value = read.csv('~/2_parameter/bionomics_value.csv')
 int = read.csv('~/2_parameter/intervention_value.csv')
 
-library(ggplot2)
 library(lhs)
 library(sensitivity)
-library(tidyr)
-library(dplyr)
-library(abind)
-library(profvis)
-library(epiR)
-library(Rmisc)
 library(data.table)
 
 ##############################
 set.seed(123)
-n_samples = 500 #number of samples generated from LHS
-n_params = 4 #number of parameters
-repeats = 50 #number of repeats for averaging
+
 
 #default parameters
 N_b=1000 
@@ -43,6 +34,11 @@ xi_max = int$xi_max
 
 HBI_range=seq(0.01,1,by=0.01)
 coverage_sample=c(0.1,0.3,0.5)
+
+#LHS-PRCC
+n_samples = 500 #number of samples generated from LHS
+n_params = 4 #number of parameters
+repeats = 50 #number of repeats for averaging
 
 
 DT_plot <- data.table("mean" = numeric(),    # Create an empty data.table

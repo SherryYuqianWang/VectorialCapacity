@@ -1,25 +1,17 @@
 rm(list = ls())
 
 source("~/1_function/relchange_entomology_GSA.R")
-parameter_value = read.csv('~/2_parameter/parameter_value.csv')
+parameter_value = read.csv('~/2_parameter/bionomics_value.csv')
 
 
-library(ggplot2)
-library(lhs)
-library(sensitivity)
-library(tidyr)
-library(dplyr)
 library(sensobol)
 library(data.table)
 
 ##############################
-set.seed(123)
-n_params = 5
-repeats = 50
-species = 4
+#set.seed(123)
+
 
 #default parameters
-N_samples = 500
 N_b = 1000 # human population size
 
 value<-parameter_value[parameter_value$species == "all",2:13]
@@ -51,7 +43,7 @@ X<-sobol_matrices(
   N=N,
   params=params,
   order = order,
-  type = "QRN",
+  type = "QRN"
 )
 
 
@@ -71,7 +63,7 @@ for (s in 1:nrow(X1)){
 }
 
 
-ind <- sobol_indices(Y = y, N = N, params = params, order=order, boot = TRUE, R = R)
+ind <-sobol_indices(Y = y, N = N, params = params, order=order, boot = TRUE, R = R)
 
 plot<-data.frame(ind$results)
 
