@@ -9,7 +9,7 @@
 
 ## Introduction
 
-This repository contains the codes for the manuscript: Optimizing malaria vector control: A systematic review and mathematical modelling study to identify desirable characteristics of novel tools in different settings.
+This repository contains the codes for the manuscript titled: "Optimizing malaria vector control in the Greater Mekong Subregion: a systematic review and mathematical modelling study to identify desirable intervention characteristics".
 
 
 ## Requirements
