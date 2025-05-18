@@ -26,4 +26,4 @@ This repository contains the codes for the manuscript: Optimizing malaria vector
 ## Maintainer
 
 Current maintainer:
-- Yuqian Wang (yuqian.wang@unibas.ch)
+- Yuqian Wang (yuqian.wang[at]uzh.ch)
